@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>AngularJS SPA e-Ticket</title>
+  </head>
+
+  <style>
+    body,
+    h1,
+    h3,
+    form {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      color: #444;
+    }
+
+    h1 {
+      font-size: 38px;
+      margin-bottom: 30px;
+      color: #4b56b9;
+    }
+
+    h3 {
+      font-size: 19px;
+      color: #2a2d4a;
+      margin-bottom: 3px;
+    }
+
+    .container {
+      width: 60%;
+      margin: 0 auto;
+      margin-top: 40px;
+      padding: 20px;
+      padding-bottom: 0px;
+      background-color: white;
+      border-radius: 12px;
+    }
+
+    .t_form {
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      padding: 10px;
+      font-size: 20px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e0;
+      width: 100%;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #2d3260;
+      outline: none;
+    }
+
+    .align {
+      position: relative;
+      width: 48%;
+    }
+
+    textarea {
+      resize: none;
+      height: 70px;
+    }
+
+    input[type="submit"] {
+      position: relative;
+      padding: 12px 20px;
+      font-size: 20px;
+      background-color: #4b56b9;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: -15px;
+      margin-bottom: 24px;
+      transition: 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #424ba0;
+    }
+
+    .disp_t {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 20px;
+      top: -16px;
+      background-color: #edf2f7;
+      border-radius: 12px;
+    }
+
+    .ticket-label {
+      color: #4a5568;
+      font-weight: bold;
+    }
+
+    .ticket-value {
+      color: #2d3748;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+  </style>
+
+  <body ng-app="app" ng-controller="eticket">
+    <div class="container">
+      <center><h1>Book Your Ticket</h1></center>
+      <div class="t_form">
+        <form ng-submit="showT()">
+          <div class="align">
+            <div>
+              <h3>Name:</h3>
+              <input required type="text" ng-model="uname" />
+            </div>
+            <div>
+              <h3>Contact:</h3>
+              <input required type="number" ng-model="cont" />
+            </div>
+            <div>
+              <h3>Address:</h3>
+              <textarea required ng-model="addr"></textarea>
+            </div>
+            <div>
+              <h3>Gender:</h3>
+              <select ng-model="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="align">
+            <div>
+              <h3>Start of Journey:</h3>
+              <input required type="date" ng-model="soj" />
+            </div>
+            <div>
+              <h3>End of Journey:</h3>
+              <input required type="date" ng-model="eoj" />
+            </div>
+            <div>
+              <h3>Number of Passengers:</h3>
+              <input required type="number" ng-model="nop" />
+            </div>
+            <div>
+              <h3>Name of Passenger:</h3>
+              <input required type="text" ng-model="nameop" />
+            </div>
+          </div>
+          <input type="submit" value="Book Ticket" />
+        </form>
+      </div>
+
+      <div ng-model="disp" ng-init="disp = flase">
+        <div ng-if="disp" class="disp_t">
+          <div class="align_tic">
+            <div class="ticket-label">Name:</div>
+            <div class="ticket-value">{{uname}}</div>
+            <div class="ticket-label">Contact:</div>
+            <div class="ticket-value">{{cont}}</div>
+            <div class="ticket-label">Address:</div>
+            <div class="ticket-value">{{addr}}</div>
+            <div class="ticket-label">Gender:</div>
+            <div class="ticket-value">{{gender}}</div>
+          </div>
+          <div class="align_tic">
+            <div class="ticket-label">Start of Journey:</div>
+            <div class="ticket-value">{{sojdate}}</div>
+            <div class="ticket-label">End of Journey:</div>
+            <div class="ticket-value">{{eojdate}}</div>
+            <div class="ticket-label">Number of Passengers:</div>
+            <div class="ticket-value">{{nop}}</div>
+            <div class="ticket-label">Passenger Name:</div>
+            <div class="ticket-value">{{nameop}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var app = angular.module("app", []);
+      app.controller("eticket", [
+        "$scope",
+        function ($scope) {
+          $scope.showT = function () {
+            $scope.disp = true;
+
+            $scope.sojdate = $scope.soj.toISOString().split("T")[0];
+            $scope.eojdate = $scope.eoj.toISOString().split("T")[0];
+          };
+        },
+      ]);
+    </script>
+  </body>
+</html>
